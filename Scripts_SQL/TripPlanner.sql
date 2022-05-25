@@ -36,7 +36,7 @@ CREATE TABLE TripPlanner.POInterest(
 	Rating INT NOT NULL,
 	PoIName VARCHAR(15) NOT NULL,
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
-	Price INT NOT NULL,
+	Price VARCHAR(10) NOT NULL,
 	PoIAddress VARCHAR(30) NOT NULL,
 	CHECK(Rating >= 0 and Rating <= 5)
 );
