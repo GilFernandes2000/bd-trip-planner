@@ -1,4 +1,4 @@
-USE Project_BD
+USE p1g1
 GO
 
 CREATE SCHEMA TripPlanner
