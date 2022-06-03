@@ -1,0 +1,8 @@
+USE p1g1
+GO
+
+CREATE TRIGGER create_trip ON TripPlanner.Trip
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @

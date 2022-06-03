@@ -4,42 +4,22 @@ GO
 CREATE SCHEMA TripPlanner
 GO
 
-
-CREATE TABLE TripPlanner.Person(
-	Sex CHAR NOT NULL,
-	PfName VARCHAR(15) NOT NULL,
-	PmName VARCHAR(15) NOT NULL,
-	PlName VARCHAR(15) NOT NULL,
-	Email VARCHAR(30) NOT NULL,
-	CC VARCHAR(8) NOT NULL PRIMARY KEY,
-	PAddress VARCHAR(30) NOT NULL,
-	CHECK(Sex='F' OR Sex='M'),
-	CHECK(CC LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
-);
-
-
-CREATE TABLE TripPlanner.Trip(
-	TrType VARCHAR(15) NOT NULL,
-	TrInclude VARCHAR(50) NOT NULL,
-	TrNoInclude VARCHAR(50) NOT NULL,
-	ID INT IDENTITY(1,1) PRIMARY KEY,
-	Price INT NOT NULL,
-	Duration INT NOT NULL,
-	Departure_Date DATE NOT NULL,
-	TrState VARCHAR(10) NOT NULL,
-	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
-);
-
+select * from TripPlanner.Restaurant
 
 CREATE TABLE TripPlanner.POInterest(
 	Email VARCHAR(30) NOT NULL,
 	Rating INT NOT NULL,
-	PoIName VARCHAR(15) NOT NULL,
+	PoIName VARCHAR(30) NOT NULL,
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	Price VARCHAR(10) NOT NULL,
 	PoIAddress VARCHAR(30) NOT NULL,
-	CHECK(Rating >= 0 and Rating <= 5)
+	PoIType varchar(15) not null,
+	CHECK(Rating >= 0 and Rating <= 5),
+	CHECK(PoIType='Cultural' or PoIType='Lux' or PoIType='Casual' or PoIType='Low Cost')
 );
+
+-- alter table TripPlanner.POInterest
+-- alter column PoIName VARCHAR(30)
 
 CREATE TABLE TripPlanner.Restaurant(
 	RContact VARCHAR(15) PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.POInterest(Contact),
@@ -70,9 +50,50 @@ CREATE TABLE TripPlanner.Stay(
 	SName VARCHAR(15) NOT NULL,
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	SAddress VARCHAR(30) NOT NULL,
-	CHECK(Rating >= 0 and Rating <= 5)
+	StayType varchar(30) not null,
+	CHECK(Rating >= 0 and Rating <= 5),
+	CHECK(StayType='Cultural' or StayType='Lux' or StayType='Casual' or StayType='Low Cost')
 );
 
+create table TripPlanner.TripType(
+	ID int identity(1,1) primary key,
+	TypeName varchar(15) not null,
+	POI_Contact varchar(15) foreign key references TripPlanner.PoInterest(Contact),
+	Stay_Contact varchar(15) foreign key references TripPlanner.Stay(Contact),
+	POI_or_Stay varchar(15) not null,
+	CHECK(POI_or_Stay='POI' or POI_or_Stay='Stay'),
+	CHECK((Stay_Contact is not null and POI_Contact is null) or (Stay_Contact is null and POI_Contact is not null))
+);
+
+CREATE TABLE TripPlanner.Person(
+	Sex CHAR NOT NULL,
+	PfName VARCHAR(15) NOT NULL,
+	PmName VARCHAR(15) NOT NULL,
+	PlName VARCHAR(15) NOT NULL,
+	Email VARCHAR(30) NOT NULL,
+	CC VARCHAR(8) NOT NULL PRIMARY KEY,
+	PAddress VARCHAR(30) NOT NULL,
+	CHECK(Sex='F' OR Sex='M'),
+	CHECK(CC LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+);
+
+
+CREATE TABLE TripPlanner.Trip(
+	TrType int NOT NULL foreign key references TripPlanner.TripType(ID),
+	-- TrInclude VARCHAR(50) NOT NULL,
+	-- TrNoInclude VARCHAR(50) NOT NULL,
+	ID INT IDENTITY(1,1) PRIMARY KEY,
+	TrName VARCHAR(15) NOT NULL,
+	Price INT NOT NULL,
+	Duration INT NOT NULL,
+	Departure_Date DATE NOT NULL,
+	TrState VARCHAR(10) NOT NULL,
+	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
+);
+
+-- alter table TripPlanner.Trip
+-- drop column TrNoInclude
+-- drop column TrInclude
 
 CREATE TABLE TripPlanner.City(
 	CName VARCHAR(15) NOT NULL PRIMARY KEY,
@@ -80,36 +101,36 @@ CREATE TABLE TripPlanner.City(
 	Continent VARCHAR(15) NOT NULL,
 	Stay_Contact VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Stay(Contact),
 	PoI_Contact VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES TripPlanner.PoInterest(Contact),
-	CHECK(Continent='Europa' or Continent='Asia' or Continent='Ocenia' or Continent='Africa' or Continent='America')
+	CHECK(Continent='Europa' or Continent='Asia' or Continent='Oceania' or Continent='Africa' or Continent='America')
 );
 
-CREATE TABLE TripPlanner.Transport(
-	ID INT IDENTITY(1,1) PRIMARY KEY,
-	Price INT NOT NULL, 
-	Departure DATE NOT NULL,
-	Arrival DATE NOT NULL,
-	Num_seats INT NOT NULL,
-	CHECK(Num_seats > 0),
-	CHECK(Departure <= Arrival)
-);
+-- CREATE TABLE TripPlanner.Transport(
+-- 	ID INT IDENTITY(1,1) PRIMARY KEY,
+-- 	Price INT NOT NULL, 
+-- 	Departure DATE NOT NULL,
+-- 	Arrival DATE NOT NULL,
+-- 	Num_seats INT NOT NULL,
+-- 	CHECK(Num_seats > 0),
+-- 	CHECK(Departure <= Arrival)
+-- );
 
-CREATE TABLE TripPlanner.Car(
-	Car_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
-	Brand VARCHAR(15) NOT NULL,
-	Registration VARCHAR(15) NOT NULL
-);
+-- CREATE TABLE TripPlanner.Car(
+-- 	Car_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
+-- 	Brand VARCHAR(15) NOT NULL,
+-- 	Registration VARCHAR(15) NOT NULL
+-- );
 
-CREATE TABLE TripPlanner.Plane(
-	Plane_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
-	Company VARCHAR(15) NOT NULL,
-	Plane_Type VARCHAR(15) NOT NULL
-);
+-- CREATE TABLE TripPlanner.Plane(
+-- 	Plane_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
+-- 	Company VARCHAR(15) NOT NULL,
+-- 	Plane_Type VARCHAR(15) NOT NULL
+-- );
 
-CREATE TABLE TripPlanner.Train(
-	Train_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
-	Company VARCHAR(15) NOT NULL,
-	Train_Type VARCHAR(15) NOT NULL
-);
+-- CREATE TABLE TripPlanner.Train(
+-- 	Train_ID INT NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.Transport(ID),
+-- 	Company VARCHAR(15) NOT NULL,
+-- 	Train_Type VARCHAR(15) NOT NULL
+-- );
 
 CREATE TABLE TripPlanner.Has(
 	Person_CC VARCHAR(8) NOT NULL,
@@ -127,11 +148,11 @@ CREATE TABLE TripPlanner.Done_In(
 	FOREIGN KEY (City_Name) REFERENCES TripPlanner.City(CName)
 );
 
-CREATE TABLE TripPlanner.Can_Have(
-	Transport_ID INT NOT NULL,
-	Trip_ID INT NOT NULL,
-	PRIMARY KEY (Transport_ID, Trip_ID),
-	FOREIGN KEY (Transport_ID) REFERENCES TripPlanner.Transport(ID),
-	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID)
-);
+-- CREATE TABLE TripPlanner.Can_Have(
+-- 	Transport_ID INT NOT NULL,
+-- 	Trip_ID INT NOT NULL,
+-- 	PRIMARY KEY (Transport_ID, Trip_ID),
+-- 	FOREIGN KEY (Transport_ID) REFERENCES TripPlanner.Transport(ID),
+-- 	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID)
+-- );
 
