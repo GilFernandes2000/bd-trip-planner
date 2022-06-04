@@ -6,13 +6,12 @@
 -- insert into TripPlanner.Museum(MContact, Synopsis, Theme) values();
 -- insert into TripPlanner.Person(Sex, PfName, PmName, PIName, Email, CC, PAddress) values();
 -- insert into TripPlanner.PoIEvent(RContact, EType) values();
--- insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, PoIType) values();
+-- insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, TrType, Price, PoIAddress, PoIType) values();
 -- insert into TripPlanner.Restaurant(RContact, Stars, Speciality) values();
--- insert into TripPlanner.Stay(Email, Rating, SName, Contact, SAddress, StayType) values();
+-- insert into TripPlanner.Stay(Email, Rating, SName, Contact, TrType, SAddress, StayType) values();
 -- insert into TripPlanner.Store(RContact, SType) values();
 -- insert into TripPlanner.Trip(TrType, TrName, Price, Duration, Departure, TrState, Elaborator_CC) values();
--- insert into TripPlanner.TripType(TypeName, Stay_Contact, POI_or_Stay) values('Stay');
--- insert into TripPlanner.TripType(TypeName, POI_Contact, POI_or_Stay) values('POI');
+-- insert into TripPlanner.TripType(TypeName) values();
 
 insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, PoIType) values('restauranteEsquina@gmail.com', '4', 'restauranteEsquina', '960594359', '€€', 'Rua Esquina', 'Casual');
 insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, PoIType) values('restaurantLounge@gmail.com', '5', 'Restaurante Lounge', '960123459', '€€€', 'Rua Alberto', 'Lux');
@@ -29,8 +28,7 @@ insert into TripPlanner.Stay(Email, Rating, SName, Contact, SAddress, StayType) 
 insert into TripPlanner.Stay(Email, Rating, SName, Contact, SAddress, StayType) values('hotelRural@gmail.com', '3', 'Hotel Rural', '942753967', 'rua Cabrita', 'Low Cost');
 insert into TripPlanner.Stay(Email, Rating, SName, Contact, SAddress, StayType) values('casaAveiro@gmail.com', '4', 'Casa Aveiro', '924789712', 'rua Afonso', 'Cultural');
 
-insert into TripPlanner.TripType(TypeName, Stay_Contact, POI_or_Stay) values('Luxo Aveiro', '943584712', 'Stay');
-insert into TripPlanner.TripType(TypeName, POI_Contact, POI_or_Stay) values('Luxo Aveiro', '960123459', 'POI');
+
 
 insert into TripPlanner.City(CName, Country, Continent, Stay_Contact, PoI_Contact) values('Aveiro', 'Portugal', 'Europa', '943584712', '960123459');
 

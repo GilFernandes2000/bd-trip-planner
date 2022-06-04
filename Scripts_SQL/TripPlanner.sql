@@ -1,10 +1,16 @@
 USE p1g1
 GO
 
-CREATE SCHEMA TripPlanner
+-- CREATE SCHEMA TripPlanner
+-- USE TripPlanner
 GO
 
-select * from TripPlanner.Restaurant
+-- select * from TripPlanner.Restaurant
+
+create table TripPlanner.TripType(
+	ID int identity(1,1) primary key,
+	TypeName varchar(15) not null,
+);
 
 CREATE TABLE TripPlanner.POInterest(
 	Email VARCHAR(30) NOT NULL,
@@ -14,12 +20,9 @@ CREATE TABLE TripPlanner.POInterest(
 	Price VARCHAR(10) NOT NULL,
 	PoIAddress VARCHAR(30) NOT NULL,
 	PoIType varchar(15) not null,
-	CHECK(Rating >= 0 and Rating <= 5),
-	CHECK(PoIType='Cultural' or PoIType='Lux' or PoIType='Casual' or PoIType='Low Cost')
+	TrType int not null foreign key references TripPlanner.TripType(ID),
+	CHECK(Rating >= 0 and Rating <= 5)
 );
-
--- alter table TripPlanner.POInterest
--- alter column PoIName VARCHAR(30)
 
 CREATE TABLE TripPlanner.Restaurant(
 	RContact VARCHAR(15) PRIMARY KEY FOREIGN KEY REFERENCES TripPlanner.POInterest(Contact),
@@ -51,18 +54,8 @@ CREATE TABLE TripPlanner.Stay(
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	SAddress VARCHAR(30) NOT NULL,
 	StayType varchar(30) not null,
-	CHECK(Rating >= 0 and Rating <= 5),
-	CHECK(StayType='Cultural' or StayType='Lux' or StayType='Casual' or StayType='Low Cost')
-);
-
-create table TripPlanner.TripType(
-	ID int identity(1,1) primary key,
-	TypeName varchar(15) not null,
-	POI_Contact varchar(15) foreign key references TripPlanner.PoInterest(Contact),
-	Stay_Contact varchar(15) foreign key references TripPlanner.Stay(Contact),
-	POI_or_Stay varchar(15) not null,
-	CHECK(POI_or_Stay='POI' or POI_or_Stay='Stay'),
-	CHECK((Stay_Contact is not null and POI_Contact is null) or (Stay_Contact is null and POI_Contact is not null))
+	TrType int not null foreign key references TripPlanner.TripType(ID),
+	CHECK(Rating >= 0 and Rating <= 5)
 );
 
 CREATE TABLE TripPlanner.Person(
@@ -80,8 +73,6 @@ CREATE TABLE TripPlanner.Person(
 
 CREATE TABLE TripPlanner.Trip(
 	TrType int NOT NULL foreign key references TripPlanner.TripType(ID),
-	-- TrInclude VARCHAR(50) NOT NULL,
-	-- TrNoInclude VARCHAR(50) NOT NULL,
 	ID INT IDENTITY(1,1) PRIMARY KEY,
 	TrName VARCHAR(15) NOT NULL,
 	Price INT NOT NULL,
@@ -90,10 +81,6 @@ CREATE TABLE TripPlanner.Trip(
 	TrState VARCHAR(10) NOT NULL,
 	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
 );
-
--- alter table TripPlanner.Trip
--- drop column TrNoInclude
--- drop column TrInclude
 
 CREATE TABLE TripPlanner.City(
 	CName VARCHAR(15) NOT NULL PRIMARY KEY,
