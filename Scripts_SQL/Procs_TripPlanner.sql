@@ -158,7 +158,7 @@ BEGIN
 	END CATCH
 END
 
---Drop Procedure TripPlanner.AddPOInterest;
+--Drop Procedure TripPlanner.AddCity;
 
 GO
 

@@ -1,6 +1,6 @@
 use p1g1
 
-DROP TABLE TripPlanner.TripType;
+
 DROP TABLE TripPlanner.Can_Have;
 DROP TABLE TripPlanner.Done_In;
 DROP TABLE TripPlanner.Has;
@@ -13,6 +13,7 @@ DROP TABLE TripPlanner.Restaurant;
 DROP TABLE TripPlanner.POInterest;
 DROP TABLE TripPlanner.Trip;
 DROP TABLE TripPlanner.Person;
+DROP TABLE TripPlanner.TripType;
 
 DROP SCHEMA TripPlanner;
 

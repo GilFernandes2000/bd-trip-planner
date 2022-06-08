@@ -12,6 +12,13 @@ create table TripPlanner.TripType(
 	TypeName varchar(15) not null,
 );
 
+CREATE TABLE TripPlanner.City(
+	CName VARCHAR(15) NOT NULL PRIMARY KEY,
+	Country VARCHAR(15) NOT NULL,
+	Continent VARCHAR(15) NOT NULL,
+	CHECK(Continent='Europa' or Continent='Asia' or Continent='Oceania' or Continent='Africa' or Continent='America')
+);
+
 CREATE TABLE TripPlanner.POInterest(
 	Email VARCHAR(30) NOT NULL,
 	Rating INT NOT NULL,
@@ -19,7 +26,7 @@ CREATE TABLE TripPlanner.POInterest(
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	Price VARCHAR(10) NOT NULL,
 	PoIAddress VARCHAR(30) NOT NULL,
-	PoIType varchar(15) not null,
+	City varchar(15) not null foreign key references TripPlanner.City(CName),
 	TrType int not null foreign key references TripPlanner.TripType(ID),
 	CHECK(Rating >= 0 and Rating <= 5)
 );
@@ -53,7 +60,7 @@ CREATE TABLE TripPlanner.Stay(
 	SName VARCHAR(15) NOT NULL,
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	SAddress VARCHAR(30) NOT NULL,
-	StayType varchar(30) not null,
+	City varchar(15) not null foreign key references TripPlanner.City(CName),
 	TrType int not null foreign key references TripPlanner.TripType(ID),
 	CHECK(Rating >= 0 and Rating <= 5)
 );
@@ -70,7 +77,6 @@ CREATE TABLE TripPlanner.Person(
 	CHECK(CC LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
 );
 
-
 CREATE TABLE TripPlanner.Trip(
 	TrType int NOT NULL foreign key references TripPlanner.TripType(ID),
 	ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -82,14 +88,7 @@ CREATE TABLE TripPlanner.Trip(
 	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
 );
 
-CREATE TABLE TripPlanner.City(
-	CName VARCHAR(15) NOT NULL PRIMARY KEY,
-	Country VARCHAR(15) NOT NULL,
-	Continent VARCHAR(15) NOT NULL,
-	Stay_Contact VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Stay(Contact),
-	PoI_Contact VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES TripPlanner.PoInterest(Contact),
-	CHECK(Continent='Europa' or Continent='Asia' or Continent='Oceania' or Continent='Africa' or Continent='America')
-);
+
 
 -- CREATE TABLE TripPlanner.Transport(
 -- 	ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -118,6 +117,7 @@ CREATE TABLE TripPlanner.City(
 -- 	Company VARCHAR(15) NOT NULL,
 -- 	Train_Type VARCHAR(15) NOT NULL
 -- );
+
 
 CREATE TABLE TripPlanner.Has(
 	Person_CC VARCHAR(8) NOT NULL,
