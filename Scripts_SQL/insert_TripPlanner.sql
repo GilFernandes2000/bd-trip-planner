@@ -40,7 +40,7 @@ insert into TripPlanner.Has(Person_CC, Trip_ID) values('03494372', 1);
 
 insert into TripPlanner.Done_In(City_Name, Trip_ID) values('Aveiro', 1);
 
-select * from TripPlanner.POInterest, TripPlanner.Restaurant
-
-delete from TripPlanner.Restaurant where RContact='960594359'
-delete from TripPlanner.POInterest where Contact='960594359'
+insert into TrType(ID,TypeName) values (1,'Cultural');
+insert into TrType(ID,TypeName) values (2,'Luxo');
+insert into TrType(ID,TypeName) values (3,'Casual');
+insert into TrType(ID,TypeName) values (3,'Low Cost');
