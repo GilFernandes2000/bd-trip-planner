@@ -31,6 +31,22 @@ insert into TripPlanner.Restaurant(RContact, Stars, Specialty) values('960594359
 insert into TripPlanner.Restaurant(RContact, Stars, Specialty) values('960123459', '2', 'Risoto à chefe');
 insert into TripPlanner.Restaurant(RContact, Stars, Specialty) values('960535994', '0', 'Bacalhau à Brás');
 
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('museusarte@gmail.com', '4', 'artemuseu', '964253132', '€', 'Rua Arte', 1, 'Aveiro');
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('louvre@gmail.com', '5', 'Louvre', '969217390', '€€€', 'Rua Louvre', 2, 'Paris');
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('museuargu@gmail.com', '4', 'Museu Argus', '960529094', '€', 'Rua Argus', 4, 'Aveiro');
+
+insert into TripPlanner.Museum(MContact, Synopsis, Theme) values('964253132', 'Museu que contem arte produzida na cidade de Aveiro', 'Arte de Aveiro');
+insert into TripPlanner.Museum(MContact, Synopsis, Theme) values('969217390', 'Contem uma vasta quantidade de arte a nivel mundial e artefactos de valor incalculavel', 'Historia do Mundo');
+insert into TripPlanner.Museum(MContact, Synopsis, Theme) values('960529094', 'Apresenta a historia da cerveja Argus', 'Cerveja Argus');
+
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('lembrançasAverio@gmail.com', '3', 'Loja Lembranças', '960356123', '€€', 'Rua Aveiro', 1, 'Aveiro');
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('gucci@gmail.com', '5', 'Loja Gucci', '969875459', '€€€', 'Campos Elisios', 2, 'Paris');
+insert into TripPlanner.POInterest(Email, Rating, PoIName, Contact, Price, PoIAddress, TrType, City) values('peixinho@gmail.com', '5', 'Peixinho', '960579894', '€€€', 'Rua Peixinho', 4, 'Aveiro');
+
+insert into TripPlanner.Store(RContact, SType) values('960356123', 'Lembranças');
+insert into TripPlanner.Store(RContact, SType) values('969875459', 'Roupas de Luxo');
+insert into TripPlanner.Store(RContact, SType) values('960579894', 'Ovos Moles');
+
 -- insert into TripPlanner.Store(RContact, SType) values();
 -- insert into TripPlanner.Store(RContact, SType) values();
 -- insert into TripPlanner.Store(RContact, SType) values();
@@ -53,7 +69,7 @@ insert into TripPlanner.Has(Person_CC, Trip_ID) values('03494372', 1);
 
 insert into TripPlanner.Done_In(City_Name, Trip_ID) values('Aveiro', 1);
 
-insert into TrType(ID,TypeName) values (1,'Cultural');
-insert into TrType(ID,TypeName) values (2,'Luxo');
-insert into TrType(ID,TypeName) values (3,'Casual');
-insert into TrType(ID,TypeName) values (3,'Low Cost');
+insert into TripPlanner.Stays_In(Trip_ID, StayContact, Check_In, Check_Out) values (1, '924789712', '2022-06-09', '2022-06-13');
+insert into TripPlanner.Visit(Trip_ID, POIContact) values (1, '964253132');
+insert into TripPlanner.Visit(Trip_ID, POIContact) values (1, '960579894');
+insert into TripPlanner.Visit(Trip_ID, POIContact) values (1, '960594359');

@@ -85,9 +85,25 @@ CREATE TABLE TripPlanner.Trip(
 	Duration INT NOT NULL,
 	Departure_Date DATE NOT NULL,
 	TrState VARCHAR(10) NOT NULL,
+	Stay_Contact varchar(15) not null foreign key references TripPlanner.Stay(Contact)
 	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
 );
 
+create table TripPlanner.Stays_In(
+	Trip_ID int not null,
+	StayContact varchar(15) not null,
+	Check_In date not null,
+	Check_Out date not null,
+	primary key (Trip_ID, StayContact),
+	foreign key (Trip_ID) references TripPlanner.Trip(ID),
+	foreign key (StayContact) references TripPlanner.Stay(Contact)
+);
+
+create table TripPlanner.Visit(
+	Trip_ID int not null,
+	POIContact varchar(15) not null,
+	primary key (Trip_ID, POIContact)
+);
 
 
 -- CREATE TABLE TripPlanner.Transport(
