@@ -2,8 +2,12 @@ USE p1g1
 GO
 
 -- CREATE SCHEMA TripPlanner
--- USE TripPlanner
-GO
+
+if not exists (select * from sys.schemas where name='TripPlanner')
+begin
+	exec('CREATE SCHEMA TripPlanner;')
+end
+go
 
 -- select * from TripPlanner.Restaurant
 
@@ -60,6 +64,7 @@ CREATE TABLE TripPlanner.Stay(
 	SName VARCHAR(15) NOT NULL,
 	Contact VARCHAR(15) NOT NULL PRIMARY KEY,
 	SAddress VARCHAR(30) NOT NULL,
+	-- Price int not null,
 	City varchar(15) not null foreign key references TripPlanner.City(CName),
 	TrType int not null foreign key references TripPlanner.TripType(ID),
 	CHECK(Rating >= 0 and Rating <= 5)
@@ -85,7 +90,6 @@ CREATE TABLE TripPlanner.Trip(
 	Duration INT NOT NULL,
 	Departure_Date DATE NOT NULL,
 	TrState VARCHAR(10) NOT NULL,
-	Stay_Contact varchar(15) not null foreign key references TripPlanner.Stay(Contact)
 	Elaborator_CC VARCHAR(8) NOT NULL FOREIGN KEY REFERENCES TripPlanner.Person(CC)
 );
 
@@ -99,12 +103,28 @@ create table TripPlanner.Stays_In(
 	foreign key (StayContact) references TripPlanner.Stay(Contact)
 );
 
-create table TripPlanner.Visit(
+create table TripPlanner.GoesTo(
+	InDay date not null,
 	Trip_ID int not null,
 	POIContact varchar(15) not null,
 	primary key (Trip_ID, POIContact)
 );
 
+CREATE TABLE TripPlanner.Has(
+	Person_CC VARCHAR(8) NOT NULL,
+	Trip_ID INT NOT NULL,
+	PRIMARY KEY (Person_CC, Trip_ID),
+	FOREIGN KEY (Person_CC) REFERENCES TripPlanner.Person(CC),
+	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID)
+);
+
+CREATE TABLE TripPlanner.Done_In(
+	City_Name VARCHAR(15) NOT NULL,
+	Trip_ID INT NOT NULL,
+	PRIMARY KEY (City_Name, Trip_ID),
+	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID),
+	FOREIGN KEY (City_Name) REFERENCES TripPlanner.City(CName)
+);
 
 -- CREATE TABLE TripPlanner.Transport(
 -- 	ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -135,21 +155,7 @@ create table TripPlanner.Visit(
 -- );
 
 
-CREATE TABLE TripPlanner.Has(
-	Person_CC VARCHAR(8) NOT NULL,
-	Trip_ID INT NOT NULL,
-	PRIMARY KEY (Person_CC, Trip_ID),
-	FOREIGN KEY (Person_CC) REFERENCES TripPlanner.Person(CC),
-	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID)
-);
 
-CREATE TABLE TripPlanner.Done_In(
-	City_Name VARCHAR(15) NOT NULL,
-	Trip_ID INT NOT NULL,
-	PRIMARY KEY (City_Name, Trip_ID),
-	FOREIGN KEY (Trip_ID) REFERENCES TripPlanner.Trip(ID),
-	FOREIGN KEY (City_Name) REFERENCES TripPlanner.City(CName)
-);
 
 -- CREATE TABLE TripPlanner.Can_Have(
 -- 	Transport_ID INT NOT NULL,
