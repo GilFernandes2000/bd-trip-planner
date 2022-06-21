@@ -110,15 +110,13 @@ SELECT * FROM getTripVisitPoI('Trip Aveiro');
 
 GO 
 CREATE FUNCTION getTripbyTripType (@TrType VARCHAR(15)) RETURNS TABLE AS
-	RETURN(SELECT *
+	RETURN(SELECT TrName
 		   FROM TripPlanner.Trip t,TripPlanner.TripType tp
-		    WHERE @TrType = TypeName AND t.ID = tp.ID)
+		    WHERE 'Cultural' = TypeName AND t.ID = tp.ID
+			)
 GO
 
 SELECT * FROM getTripbyTripType('Cultural');
-
-
--- ISTO TÁ MAL
 
 ------------------------------------------------------------
 
