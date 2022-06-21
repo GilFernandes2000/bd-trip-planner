@@ -36,6 +36,19 @@ GO
 
 SELECT * FROM getTripByName('Trip Quintela');
 
+----------------------------------------------------
+
+GO 
+CREATE FUNCTION getTripByPerson (@Person VARCHAR(30)) RETURNS TABLE AS
+	RETURN(SELECT TrName,Departure_Date,Elaborator_CC,ID
+		   FROM TripPlanner.Trip,TripPlanner.Person,TripPlanner.Has
+		   WHERE @Person = CONCAT(PfName,' ',PmName,' ',PlName) AND CC = Person_CC AND Trip_ID = ID)
+GO
+
+SELECT * FROM getTripByPerson('João G. Fernandes');
+
+-------------------------------------------------------------
+
 --------------------------------------------------
 --------------------------------------------------
 
@@ -85,13 +98,13 @@ SELECT * FROM getPersonByCC('02030402');
 ---------------------------------------------------------------
 
 GO 
-CREATE FUNCTION getTripVisit (@Trip VARCHAR(15)) RETURNS TABLE AS
+CREATE FUNCTION getTripVisitPoI (@Trip VARCHAR(15)) RETURNS TABLE AS
 	RETURN(SELECT PoIName, PoIAddress
 		   FROM TripPlanner.Visit,TripPlanner.Trip,TripPlanner.POInterest
 		   WHERE TrName = @Trip AND ID = Trip_ID AND POIContact = Contact)
 GO
 
-SELECT * FROM getTripVisit('Trip Aveiro');
+SELECT * FROM getTripVisitPoI('Trip Aveiro');
 
 --------------------------------------------------------------
 
@@ -103,3 +116,41 @@ CREATE FUNCTION getTripbyTripType (@TrType VARCHAR(15)) RETURNS TABLE AS
 GO
 
 SELECT * FROM getTripbyTripType('Cultural');
+
+
+-- ISTO TÁ MAL
+
+------------------------------------------------------------
+
+GO 
+CREATE FUNCTION getTripbyCity (@City VARCHAR(15)) RETURNS TABLE AS
+	RETURN(SELECT *
+		   FROM TripPlanner.Trip,TripPlanner.Done_In
+		    WHERE @City = City_Name AND Trip_ID = ID)
+GO
+
+SELECT * FROM getTripbyCity('Paris');
+
+-------------------------------------------------------------
+
+GO 
+CREATE FUNCTION getCitiesVisitedbyTrip (@Trip VARCHAR(15)) RETURNS TABLE AS
+	RETURN(SELECT CName
+		   FROM TripPlanner.Trip,TripPlanner.Done_In,TripPlanner.City
+		    WHERE @Trip = TrName AND ID = Trip_ID AND City_Name= CName)
+GO
+
+SELECT * FROM getCitiesVisitedbyTrip('Trip Aveiro');
+
+------------------------------------------------------------
+
+GO 
+CREATE FUNCTION getElaboratorbyTrip (@Trip VARCHAR(15)) RETURNS TABLE AS
+	RETURN(SELECT PfName,PmName,PlName,CC
+		   FROM TripPlanner.Trip,TripPlanner.Person
+		   WHERE @Trip = TrName AND Elaborator_CC = CC)
+GO
+
+SELECT * FROM getElaboratorbyTrip('Trip Aveiro');
+
+----------------------------------------------------------------
