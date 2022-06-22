@@ -10,7 +10,7 @@ namespace TripPlanner{
         private int _price;
         private int _duration;
         private String _departure;
-        private Strung _state;
+        private String _state;
 
         public String Trip_name{
             get {

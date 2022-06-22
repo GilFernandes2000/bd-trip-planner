@@ -36,7 +36,7 @@ namespace Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=tcp:mednat.ieeta.pt/SQLSERVER,8101;Initial Catalog=p1g1;Persist Security Info=True;User ID=p1g1;Password=Porto>Benfica;");
+            SqlConnection con = new SqlConnection("Data Source=tcp:mednat.ieeta.pt\\SQLSERVER,8101;Initial Catalog=p1g1;Persist Security Info=True;User ID=p1g1;Password=Porto>Benfica;");
             SqlDataAdapter cmd = new SqlDataAdapter();
             cmd.InsertCommand = new SqlCommand("INSERT INTO Person VALUES (@First Name,@Middle Name,@Last Name,@CC,@Email,@Address,@Sex)",con);
             cmd.InsertCommand.Parameters.AddWithValue("@First Name", textBox1.Text);
@@ -52,7 +52,5 @@ namespace Forms
             con.Close();
             MessageBox.Show("Successfully Saved!");
         }
-
-       
     }
 }
