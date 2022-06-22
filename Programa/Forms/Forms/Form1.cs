@@ -36,12 +36,12 @@ namespace Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=tcp:mednat.ieeta.pt/SQLSERVER,8101;Initial Catalog=p1g1;Persist Security Info=True;User ID=p1g1;Password=Porto>Benfica;");
+            SqlConnection con = new SqlConnection(connectionString: "Data Source=tcp:mednat.ieeta.pt\\SQLSERVER,8101;Initial Catalog=p1g1;Persist Security Info=True;User ID=p1g1;Password=Porto>Benfica;");
             SqlDataAdapter cmd = new SqlDataAdapter();
-            cmd.InsertCommand = new SqlCommand("INSERT INTO Person VALUES (@First Name,@Middle Name,@Last Name,@CC,@Email,@Address,@Sex)",con);
-            cmd.InsertCommand.Parameters.AddWithValue("@First Name", textBox1.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Middle Name", textBox2.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Last Name", textBox3.Text);
+            cmd.InsertCommand = new SqlCommand("INSERT INTO TripPlanner.Person (PfName,PmName,PlName,CC,Email,PAddress,Sex) VALUES (@FirstName,@MiddleName,@LastName,@CC,@Email,@Address,@Sex)", con);
+            cmd.InsertCommand.Parameters.AddWithValue("@FirstName", textBox1.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@MiddleName", textBox2.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@LastName", textBox3.Text);
             cmd.InsertCommand.Parameters.AddWithValue("@CC", textBox4.Text);
             cmd.InsertCommand.Parameters.AddWithValue("@Email", textBox5.Text);
             cmd.InsertCommand.Parameters.AddWithValue("@Address", textBox6.Text);
@@ -52,7 +52,6 @@ namespace Forms
             con.Close();
             MessageBox.Show("Successfully Saved!");
         }
-
-       
     }
 }
+
