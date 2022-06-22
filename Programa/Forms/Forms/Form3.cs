@@ -46,9 +46,9 @@ namespace TripPlanner
                 return;
             }
 
-            SqlCommand cmd = new SqlCommand("select * from TripPlanner.Person", con);
-            SqlDataReader reader = cmd.ExecuteReader();
-
+            SqlCommand person = new SqlCommand("select * from TripPlanner.Person", con);
+            SqlDataReader reader = person.ExecuteReader();
+            comboBox1.Items.Add("Select Person...");
             while (reader.Read())
             {
                 Person P = new Person();
@@ -61,9 +61,41 @@ namespace TripPlanner
                 P.PersonCC = reader["CC"].ToString();
                 comboBox1.Items.Add(P.First_Name + " " + P.Last_Name);
             }
+            reader.Close();
+
+            SqlCommand tp = new SqlCommand("select * from TripPlanner.TripType", con);
+            SqlDataReader readerType = tp.ExecuteReader();
+
+            while (readerType.Read())
+            {
+                TripType TT = new TripType();
+                TT.ID = Int32.Parse(readerType["ID"].ToString());
+                TT.Type = readerType["TypeName"].ToString();
+                if (!types.Items.Contains(TT.Type))
+                {
+                    types.Items.Add(TT.Type);
+                }
+            }
+            readerType.Close();
+
+            SqlCommand st = new SqlCommand("select * from TripPlanner.Stay", con);
+            SqlDataReader readerStay = st.ExecuteReader();
+            stays.Items.Add("Select a Stay...");
+            while (readerStay.Read())
+            {
+                Stay S = new Stay();
+                S.Email = readerStay["Email"].ToString();
+                S.Rating = Int32.Parse(readerStay["Rating"].ToString());
+                S.Name = readerStay["SName"].ToString();
+                S.Contact = readerStay["Contact"].ToString();
+                S.Address = readerStay["SAddress"].ToString();
+                stays.Items.Add(S.Name);
+            }
+
+            readerStay.Close();
             con.Close();
             comboBox1.SelectedIndex = 0;
-
+            stays.SelectedIndex = 0;
             currentPerson = 0;
 
 
@@ -104,6 +136,30 @@ namespace TripPlanner
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+
+            stays.Items.Clear();
+
+            SqlCommand st = new SqlCommand("select * from TripPlanner.Stay s, TriPlanner.TripType tt where tt.ID = s.TrType and tt.TypeName = " + types.SelectedItem.ToString(), con);
+            SqlDataReader readerStay = st.ExecuteReader();
+            stays.Items.Add("Select a Stay...");
+            while (readerStay.Read())
+            {
+                Stay S = new Stay();
+                S.Email = readerStay["Email"].ToString();
+                S.Rating = Int32.Parse(readerStay["Rating"].ToString());
+                S.Name = readerStay["SName"].ToString();
+                S.Contact = readerStay["Contact"].ToString();
+                S.Address = readerStay["SAddress"].ToString();
+                stays.Items.Add(S.Name);
+            }
+
+            readerStay.Close();
+            con.Close();
 
         }
 
@@ -122,17 +178,22 @@ namespace TripPlanner
             SqlDataAdapter cmd = new SqlDataAdapter();
             DateTime departureDate = dateTimePicker1.Value;
             cmd.InsertCommand = new SqlCommand("insert into Trip values(@TrType, @TrName, @Price, @Duration, @Departure_Date, @TrState)", con);
-
+            
             if(departureDate > DateTime.Today)
             {
                 cmd.InsertCommand.Parameters.AddWithValue("@Departure_Date", departureDate);
+                cmd.InsertCommand.Parameters.AddWithValue("@Duration", Int32.Parse(duration.Text.ToString()));
+                cmd.InsertCommand.Parameters.AddWithValue("@TrName", tripName.Text.ToString());
+                cmd.InsertCommand.Parameters.AddWithValue("@TrType", types.SelectedItem.ToString());
+                cmd.InsertCommand.Parameters.AddWithValue("@TrState", "Scheduled");
+                cmd.InsertCommand.Parameters.AddWithValue("@Price", 0);
+                cmd.InsertCommand.ExecuteNonQuery();
+                MessageBox.Show("Trip Created with success");
             }
             else
             {
                 MessageBox.Show("Date not valid");
             }
-
-
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -161,6 +222,10 @@ namespace TripPlanner
             {
                 MessageBox.Show(comboBox1.Text + " already added to your trip");
             }
+            else if(comboBox1.Text == "Select Person...")
+            {
+                MessageBox.Show(comboBox1.Text);
+            }
             else
             {
                 listBox1.Items.Add(comboBox1.Text);
@@ -172,6 +237,10 @@ namespace TripPlanner
             if (listBox1.Items.Contains(comboBox1.Text))
             {
                 listBox1.Items.Remove(comboBox1.Text);
+            }
+            else if (comboBox1.Text == "Select Person...")
+            {
+                MessageBox.Show(comboBox1.Text);
             }
             else
             {
