@@ -34,9 +34,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.duration = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.cities = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.stays = new System.Windows.Forms.ComboBox();
@@ -47,7 +46,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tripName = new System.Windows.Forms.TextBox();
+            this.city = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -108,13 +108,13 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Duration";
             // 
-            // textBox4
+            // duration
             // 
-            this.textBox4.Location = new System.Drawing.Point(576, 32);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(83, 27);
-            this.textBox4.TabIndex = 11;
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            this.duration.Location = new System.Drawing.Point(576, 32);
+            this.duration.Name = "duration";
+            this.duration.Size = new System.Drawing.Size(83, 27);
+            this.duration.TabIndex = 11;
+            this.duration.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // label7
             // 
@@ -125,14 +125,6 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "Cidade";
             this.label7.Click += new System.EventHandler(this.label7_Click);
-            // 
-            // cities
-            // 
-            this.cities.Location = new System.Drawing.Point(576, 87);
-            this.cities.Name = "cities";
-            this.cities.Size = new System.Drawing.Size(151, 27);
-            this.cities.TabIndex = 14;
-            this.cities.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // label8
             // 
@@ -175,7 +167,6 @@
             // comboBox1
             // 
             this.comboBox1.AllowDrop = true;
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(300, 127);
             this.comboBox1.Name = "comboBox1";
@@ -230,19 +221,28 @@
             this.label9.TabIndex = 25;
             this.label9.Text = "Trip Name";
             // 
-            // textBox1
+            // tripName
             // 
-            this.textBox1.Location = new System.Drawing.Point(300, 31);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(151, 27);
-            this.textBox1.TabIndex = 26;
+            this.tripName.Location = new System.Drawing.Point(300, 31);
+            this.tripName.Name = "tripName";
+            this.tripName.Size = new System.Drawing.Size(151, 27);
+            this.tripName.TabIndex = 26;
+            // 
+            // city
+            // 
+            this.city.FormattingEnabled = true;
+            this.city.Location = new System.Drawing.Point(576, 85);
+            this.city.Name = "city";
+            this.city.Size = new System.Drawing.Size(151, 28);
+            this.city.TabIndex = 27;
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1148, 235);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.city);
+            this.Controls.Add(this.tripName);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -253,9 +253,8 @@
             this.Controls.Add(this.stays);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.cities);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.duration);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -277,9 +276,8 @@
         private Label label2;
         private Label label3;
         private Label label4;
-        private TextBox textBox4;
+        private TextBox duration;
         private Label label7;
-        private TextBox cities;
         private Label label8;
         private DateTimePicker dateTimePicker1;
         private ComboBox stays;
@@ -290,6 +288,7 @@
         private Button button2;
         private Button button3;
         private Label label9;
-        private TextBox textBox1;
+        private TextBox tripName;
+        private ComboBox city;
     }
 }
