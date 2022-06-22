@@ -21,7 +21,7 @@ namespace TripPlanner
             }
 
             set {
-                if (value.Equals(null) | value.Equals(" ")){
+                if (value.Equals(null) || value.Equals(" ")){
                     throw new Exception("Person's CC cannot be null");
                     return;
                 }
@@ -30,12 +30,12 @@ namespace TripPlanner
                     return;
                 }
                 for (int i = 0; i < value.Length; i++){
-                    if (!isDigit(value[i])){
+                    if (!Char.IsDigit(value[i])){
                         throw new Exception("Peron's CC must only contain digits");
                         return;
                     }
                 }
-                _CC = value
+                _CC = value;
             }
         }
 
@@ -44,10 +44,10 @@ namespace TripPlanner
                 return _sex;
             }
             set {
-                if (value.Equals("F") | value.Equals("M")){
+                if (value.Equals("F") || value.Equals("M")){
                     _sex = value;
                 }
-                throw new Exception("Person's Sex can only be F or M");
+                //throw new Exception("Person's Sex can only be F or M");
                 return;
             }
         }
@@ -97,7 +97,7 @@ namespace TripPlanner
             }
             set {
                 if (!value.Contains("@")){
-                    throw new Exception("Emails must have @");
+                    //throw new Exception("Emails must have @");
                     return;
                 }
                 _email = value;
@@ -114,7 +114,7 @@ namespace TripPlanner
         }
 
         public override String ToString(){
-            return _PfName + " " + _PmName + " " + _PlName + '\nCC: ' + _CC + '\nEmail: ' + _email; 
+            return _PfName + " " + _PmName + " " + _PlName + "\nCC: " + _CC + "\nEmail: " + _email; 
         }
     }
 }

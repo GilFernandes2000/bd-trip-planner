@@ -7,7 +7,7 @@ if not exists (select * from sys.schemas where name='TripPlanner')
 begin
 	exec('CREATE SCHEMA TripPlanner;')
 end
-go
+go	
 
 -- select * from TripPlanner.Restaurant
 
