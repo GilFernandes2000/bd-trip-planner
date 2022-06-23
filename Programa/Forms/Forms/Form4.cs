@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms;
 using System.Data.SqlClient;
 
 namespace TripPlanner
@@ -49,10 +48,10 @@ namespace TripPlanner
             }
             
 
-            SqlCommand cmd = new SqlCommand("SELECT CName, Country, Continent FROM TripPlanner.City", con);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM TripPlanner.City", con);
             SqlDataReader reader = cmd.ExecuteReader();
             comboBox2.Items.Clear();
-            comboBox2.Items.Add("Select City...");
+            //comboBox2.Items.Add("Select City...");
             while (reader.Read())
             {
                 City C = new City();
@@ -63,8 +62,6 @@ namespace TripPlanner
             }
 
             con.Close();
-            //listBox1.SelectedIndex = 0;
-            comboBox2.SelectedIndex = 0;
            
 
 
@@ -74,31 +71,7 @@ namespace TripPlanner
 
         private void ComboBox2_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            con = getSGBDConnection();
-            if (!verifySGBDConnection())
-            {
-                return;
-            }
-            
-            SqlCommand cmd = new SqlCommand("SELECT PoIname, Rating, Email, Contact, Price, PoIAddress FROM TripPlanner.POInterest WHERE City = " + comboBox2.Items[comboBox2.SelectedIndex], con);
-            SqlDataReader reader = cmd.ExecuteReader();
-            listBox2.Items.Clear();
-            while (reader.Read())
-            {
-                POI P = new POI();
-                P.POI_name = reader["PoIName"].ToString();
-                P.Rating = Int32.Parse(reader["Rating"].ToString());
-                P.Email = reader["Email"].ToString();
-                P.Contact = reader["Contact"].ToString();
-                P.Price = reader["Price"].ToString();
-                P.Address = reader["PoIAddress"].ToString();
-                listBox2.Items.Add(P.POI_name);
-            }
-
-            con.Close();
-
-            listBox2.SelectedIndex = 0;
-            
+           
 
             
         }
@@ -149,11 +122,128 @@ namespace TripPlanner
             cmd.InsertCommand.Parameters.AddWithValue("@Price", textBox5.Text);
             cmd.InsertCommand.Parameters.AddWithValue("@PoIAddress", textBox6.Text);
             cmd.InsertCommand.Parameters.AddWithValue("@TrType", textBox7.Text);
-            
+
             cmd.InsertCommand.ExecuteNonQuery();
 
             con.Close();
-            MessageBox.Show("Sucess!");
+            MessageBox.Show("Sucessfully Created!(Go check the near box)");
+        }
+
+        private void comboBox2_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+
+            String item = comboBox2.Items[comboBox2.SelectedIndex].ToString();
+            String query = "select * FROM TripPlanner.POInterest WHERE City = '" + item + "'";
+            SqlCommand cmd = new SqlCommand(query, con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            listBox2.Items.Clear();
+            while (reader.Read())
+            {
+                POI P = new POI();
+                P.POI_name = reader["PoIName"].ToString();
+                P.Rating = Int32.Parse(reader["Rating"].ToString());
+                P.Email = reader["Email"].ToString();
+                P.Contact = reader["Contact"].ToString();
+                P.Price = reader["Price"].ToString();
+                P.Address = reader["PoIAddress"].ToString();
+                listBox2.Items.Add(P.POI_name);
+            }
+            reader.Close();
+
+            con.Close();
+
+            
+
+        }
+
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+           
+
+            SqlCommand cmd = new SqlCommand("SELECT PoIName, Rating, Email, Contact, Price, PoIAddress FROM TripPlanner.POInterest WHERE PoIName = '" + listBox2.SelectedItem + "'", con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            listBox3.Items.Clear();
+            while (reader.Read())
+            {
+                POI P = new POI();
+                P.POI_name = reader["PoIName"].ToString();
+                P.Rating = Int32.Parse(reader["Rating"].ToString());
+                P.Email = reader["Email"].ToString();
+                P.Contact = reader["Contact"].ToString();
+                P.Price = reader["Price"].ToString();
+                P.Address = reader["PoIAddress"].ToString();
+                listBox3.Items.Add("Info:");
+                listBox3.Items.Add(" ");
+                listBox3.Items.Add("Name: " + P.POI_name);
+                listBox3.Items.Add("Rating: " + P.Rating);
+                listBox3.Items.Add("Email: " + P.Email);
+                listBox3.Items.Add("Contact: " + P.Contact);
+                listBox3.Items.Add("Price: " + P.Price);
+                listBox3.Items.Add("Address: " + P.Address);
+            }
+
+            con.Close();
+
+        }
+
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+
+            String item = comboBox2.Items[comboBox2.SelectedIndex].ToString();
+            String query = "select * FROM TripPlanner.POInterest WHERE City = '" + item + "'";
+            SqlCommand cmd = new SqlCommand(query, con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            listBox2.Items.Clear();
+            while (reader.Read())
+            {
+                POI P = new POI();
+                P.POI_name = reader["PoIName"].ToString();
+                P.Rating = Int32.Parse(reader["Rating"].ToString());
+                P.Email = reader["Email"].ToString();
+                P.Contact = reader["Contact"].ToString();
+                P.Price = reader["Price"].ToString();
+                P.Address = reader["PoIAddress"].ToString();
+                listBox2.Items.Add(P.POI_name);
+            }
+            reader.Close();
+
+            con.Close();
+
         }
     }
     
