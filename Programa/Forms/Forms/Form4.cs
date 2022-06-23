@@ -21,7 +21,6 @@ namespace TripPlanner
         {
             InitializeComponent();
             Load += new EventHandler(Form4_Load);
-            listBox1.DoubleClick += new EventHandler(ListBox1_DoubleClick);
         }
 
         private SqlConnection getSGBDConnection()
@@ -48,32 +47,60 @@ namespace TripPlanner
             {
                 return;
             }
+            
 
             SqlCommand cmd = new SqlCommand("SELECT CName, Country, Continent FROM TripPlanner.City", con);
             SqlDataReader reader = cmd.ExecuteReader();
-            listBox1.Items.Clear();
-
+            comboBox2.Items.Clear();
+            comboBox2.Items.Add("Select City...");
             while (reader.Read())
             {
                 City C = new City();
                 C.City_name = reader["CName"].ToString();
                 C.Country_name = reader["Country"].ToString();
                 C.Continent_name = reader["Continent"].ToString();
-                listBox1.Items.Add(C.City_name);
+                comboBox2.Items.Add(C.City_name);
             }
 
             con.Close();
             //listBox1.SelectedIndex = 0;
-
-            currentCity = 0;
+            comboBox2.SelectedIndex = 0;
            
+
+
+
         }
-        private void ListBox1_DoubleClick(object sender, EventArgs e)
+      
+
+        private void ComboBox2_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (listBox1.SelectedItem != null)
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
             {
-                MessageBox.Show(listBox1.SelectedItem.ToString());
+                return;
             }
+            
+            SqlCommand cmd = new SqlCommand("SELECT PoIname, Rating, Email, Contact, Price, PoIAddress FROM TripPlanner.POInterest WHERE City = " + comboBox2.Items[comboBox2.SelectedIndex], con);
+            SqlDataReader reader = cmd.ExecuteReader();
+            listBox2.Items.Clear();
+            while (reader.Read())
+            {
+                POI P = new POI();
+                P.POI_name = reader["PoIName"].ToString();
+                P.Rating = Int32.Parse(reader["Rating"].ToString());
+                P.Email = reader["Email"].ToString();
+                P.Contact = reader["Contact"].ToString();
+                P.Price = reader["Price"].ToString();
+                P.Address = reader["PoIAddress"].ToString();
+                listBox2.Items.Add(P.POI_name);
+            }
+
+            con.Close();
+
+            listBox2.SelectedIndex = 0;
+            
+
+            
         }
 
 
@@ -87,9 +114,46 @@ namespace TripPlanner
 
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+           
+
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+
+            SqlDataAdapter cmd = new SqlDataAdapter();
+            cmd.InsertCommand = new SqlCommand("INSERT INTO TripPlanner.POInterest (Email,Rating,PoIName,Contact,Price,PoIAddress,City,TrType) VALUES (@Email,@Rating,@PoIName,@Contact,@Price,@PoIAddress,@City,@TrType)", con);
+            cmd.InsertCommand.Parameters.AddWithValue("@Email", textBox1.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@Rating", Int32.Parse(textBox2.Text));
+            cmd.InsertCommand.Parameters.AddWithValue("@PoIName", textBox3.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@Contact", textBox4.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@City", comboBox2.Items[comboBox2.SelectedIndex]);
+            cmd.InsertCommand.Parameters.AddWithValue("@Price", textBox5.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@PoIAddress", textBox6.Text);
+            cmd.InsertCommand.Parameters.AddWithValue("@TrType", textBox7.Text);
+            
+            cmd.InsertCommand.ExecuteNonQuery();
+
+            con.Close();
+            MessageBox.Show("Sucess!");
         }
     }
     
