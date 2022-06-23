@@ -16,7 +16,6 @@ namespace TripPlanner{
             set {
                 if (String.IsNullOrEmpty(value)){
                     throw new Exception("City must have a name");
-                    return;
                 }
                 _name = value;
             }
@@ -29,7 +28,6 @@ namespace TripPlanner{
             set {
                 if (String.IsNullOrEmpty(value)){
                     throw new Exception("Country must have a name");
-                    return;
                 }
                 _country = value;
             }
@@ -42,7 +40,6 @@ namespace TripPlanner{
             set {
                 if (String.IsNullOrEmpty(value)){
                     throw new Exception("Continent must have a name");
-                    return;
                 }
                 _continent = value;
             }
