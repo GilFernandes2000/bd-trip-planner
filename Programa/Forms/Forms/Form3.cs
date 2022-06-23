@@ -223,19 +223,37 @@ namespace TripPlanner
         private void button1_Click(object sender, EventArgs e)
         {
             con = getSGBDConnection();
+
             if (!verifySGBDConnection())
             {
                 return;
             }
-
+            String C = "";
             SqlDataAdapter cmd = new();
             DateTime departureDate = dateTimePicker1.Value;
-            cmd.InsertCommand = new SqlCommand("insert into TripPlanner.Trip(TrType, TrName, Price, Duration, Departure_Date, Elaborator_CC, TrState) values (@TrType, @TrName, @Price, @Duration, @Departure_Date, @Elaborator_CC, @TrState)", con);
+            cmd.InsertCommand = new SqlCommand("insert into TripPlanner.Trip(TrType, TrName, Price, Duration, Departure_Date, Elaborator_CC, TrState) values (@TrType, @TrName, @Price, @Duration, @Departure_Date, @Elaborator_CC, @TrState);", con);
 
             if (CC.ReadOnly == true)
             {
                 if (departureDate > DateTime.Today)
                 {
+                    try
+                    {
+                        SqlCommand c = new("select * from TripPlanner.Person", con);
+                        SqlDataReader read = c.ExecuteReader();
+                        while (read.Read())
+                        {
+                            if (read["Email"].ToString() == CC.Text)
+                            {
+                                C = read["CC"].ToString();
+                            }
+                        }
+                        read.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
 
                     cmd.InsertCommand.Parameters.AddWithValue("@Departure_Date", departureDate);
                     cmd.InsertCommand.Parameters.AddWithValue("@Duration", Int32.Parse(duration.Text.ToString()));
@@ -243,30 +261,25 @@ namespace TripPlanner
                     cmd.InsertCommand.Parameters.AddWithValue("@TrType", types.SelectedIndex);
                     cmd.InsertCommand.Parameters.AddWithValue("@TrState", "Scheduled");
                     cmd.InsertCommand.Parameters.AddWithValue("@Price", 0);
+                    cmd.InsertCommand.Parameters.AddWithValue("@Elaborator_CC", C);
+                    cmd.InsertCommand.ExecuteNonQuery();
 
-                    try
-                    {
-                        SqlCommand c = new("select * from TripPlanner.Person", con);
-                        SqlDataReader read = c.ExecuteReader();
-                        while (read.Read())
-                        {
-                            if(read["Email"].ToString() == CC.Text)
-                            {
-                                cmd.InsertCommand.Parameters.AddWithValue("@Elaborator_CC", read["CC"].ToString());
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-
-                    MessageBox.Show("Trip Created with success");
+                    con.Close();
 
                     foreach (String item in listBox1.Items)
                     {
                         AddPersonsToTrip(tripName.Text, item);
                     }
+
+                    MessageBox.Show("Trip Created with success");
+                    tripName.Text = "";
+                    duration.Text = "";
+                    types.Items.Clear();
+                    dateTimePicker1.Value = DateTime.Today;
+                    city.SelectedIndex = 0;
+                    comboBox1.SelectedIndex = 0;
+                    stays.SelectedIndex = 0;
+                    stays.SelectedIndex = 0;
                 }
                 else
                 {
@@ -277,6 +290,7 @@ namespace TripPlanner
             {
                 MessageBox.Show("User not Logged In");
             }
+            
         }
 
         private void AddPersonsToTrip(String TripName, String PersonName)
@@ -306,7 +320,7 @@ namespace TripPlanner
             {
                 if (readerT["TrName"] == tripName.Text.ToString().Trim())
                 {
-                    ID = readerPer["ID"].ToString();
+                    ID = readerT["ID"].ToString();
                 }
             }
             readerT.Close();
@@ -315,7 +329,9 @@ namespace TripPlanner
             add.InsertCommand = new SqlCommand("insert into TripPlanner.Has(Person_CC, Trip_ID) values (@Person_CC, @Trip_ID)");
             add.InsertCommand.Parameters.AddWithValue("@Person_CC", CC);
             add.InsertCommand.Parameters.AddWithValue("@Trip_ID", ID);
-            
+            MessageBox.Show(con.ToString());
+            add.InsertCommand.ExecuteNonQuery();
+
             con.Close();
         }
 
@@ -452,6 +468,53 @@ namespace TripPlanner
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            con = getSGBDConnection();
+            if (!verifySGBDConnection())
+            {
+                return;
+            }
+            Person P = new();
+            SqlCommand cmd = new("select * from TripPlanner.Person", con);
+            SqlDataReader readerEm = cmd.ExecuteReader();
+            int counter = 0;
+            while (readerEm.Read())
+            {
+                if (readerEm["Email"].ToString() == CC.Text)
+                {
+
+
+                    P.Sex = readerEm["Sex"].ToString();
+                    P.First_Name = readerEm["PfName"].ToString();
+                    P.Middle_Name = readerEm["PmName"].ToString();
+                    P.Last_Name = readerEm["PlName"].ToString();
+                    P.Email = readerEm["Email"].ToString();
+                    P.Address = readerEm["PAddress"].ToString();
+                    P.PersonCC = readerEm["CC"].ToString();
+                    counter = 1;
+
+                }
+            }
+            readerEm.Close();
+
+            if (counter == 1)
+            {
+                SqlCommand h = new("select * from TripPlanner.Trip", con);
+                SqlDataReader readerT = h.ExecuteReader();
+                int counterhist = 0;
+                while (readerT.Read())
+                {
+                    if (readerT["Elaborator_CC"].ToString() == P.PersonCC)
+                    {
+                        hist.Items.Add(readerT["TrName"].ToString() + "\t" + readerT["TrType"].ToString());
+                    }
+                }
+                readerT.Close();
+            }
+            con.Close();
         }
     }
 }
