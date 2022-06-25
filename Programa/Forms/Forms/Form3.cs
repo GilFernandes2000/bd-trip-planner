@@ -229,9 +229,11 @@ namespace TripPlanner
                 return;
             }
             String C = "";
-            SqlDataAdapter cmd = new();
+            //qlDataAdapter cmd = new();
             DateTime departureDate = dateTimePicker1.Value;
-            cmd.InsertCommand = new SqlCommand("insert into TripPlanner.Trip(TrType, TrName, Price, Duration, Departure_Date, Elaborator_CC, TrState) values (@TrType, @TrName, @Price, @Duration, @Departure_Date, @Elaborator_CC, @TrState);", con);
+            //cmd.InsertCommand = new SqlCommand("insert into TripPlanner.Trip(TrType, TrName, Price, Duration, Departure_Date, Elaborator_CC, TrState) values (@TrType, @TrName, @Price, @Duration, @Departure_Date, @Elaborator_CC, @TrState);", con);
+            SqlCommand cmd = new("TripPlanner.AddTrip", con);
+            cmd.CommandType = CommandType.StoredProcedure;
 
             if (CC.ReadOnly == true)
             {
@@ -255,14 +257,14 @@ namespace TripPlanner
                         MessageBox.Show(ex.Message);
                     }
 
-                    cmd.InsertCommand.Parameters.AddWithValue("@Departure_Date", departureDate);
-                    cmd.InsertCommand.Parameters.AddWithValue("@Duration", Int32.Parse(duration.Text.ToString()));
-                    cmd.InsertCommand.Parameters.AddWithValue("@TrName", tripName.Text);
-                    cmd.InsertCommand.Parameters.AddWithValue("@TrType", types.SelectedIndex);
-                    cmd.InsertCommand.Parameters.AddWithValue("@TrState", "Scheduled");
-                    cmd.InsertCommand.Parameters.AddWithValue("@Price", 0);
-                    cmd.InsertCommand.Parameters.AddWithValue("@Elaborator_CC", C);
-                    cmd.InsertCommand.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@Departure_Date", departureDate);
+                    cmd.Parameters.AddWithValue("@Duration", Int32.Parse(duration.Text.ToString()));
+                    cmd.Parameters.AddWithValue("@TrName", tripName.Text);
+                    cmd.Parameters.AddWithValue("@TrType", types.SelectedIndex);
+                    cmd.Parameters.AddWithValue("@TrState", "Scheduled");
+                    cmd.Parameters.AddWithValue("@Price", 0);
+                    cmd.Parameters.AddWithValue("@Elaborator_CC", C);
+                    cmd.ExecuteNonQuery();
 
                     con.Close();
 
