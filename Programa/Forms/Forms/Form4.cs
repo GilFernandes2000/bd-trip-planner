@@ -112,18 +112,17 @@ namespace TripPlanner
                 return;
             }
 
-            SqlDataAdapter cmd = new SqlDataAdapter();
-            cmd.InsertCommand = new SqlCommand("INSERT INTO TripPlanner.POInterest (Email,Rating,PoIName,Contact,Price,PoIAddress,City,TrType) VALUES (@Email,@Rating,@PoIName,@Contact,@Price,@PoIAddress,@City,@TrType)", con);
-            cmd.InsertCommand.Parameters.AddWithValue("@Email", textBox1.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Rating", Int32.Parse(textBox2.Text));
-            cmd.InsertCommand.Parameters.AddWithValue("@PoIName", textBox3.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Contact", textBox4.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@City", comboBox2.Items[comboBox2.SelectedIndex]);
-            cmd.InsertCommand.Parameters.AddWithValue("@Price", textBox5.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@PoIAddress", textBox6.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@TrType", textBox7.Text);
+            SqlCommand cmd = new("TripPlanner.AddPOInterest", con);
+            cmd.Parameters.AddWithValue("@Email", textBox1.Text);
+            cmd.Parameters.AddWithValue("@Rating", Int32.Parse(textBox2.Text));
+            cmd.Parameters.AddWithValue("@PoIName", textBox3.Text);
+            cmd.Parameters.AddWithValue("@Contact", textBox4.Text);
+            cmd.Parameters.AddWithValue("@City", comboBox2.Items[comboBox2.SelectedIndex]);
+            cmd.Parameters.AddWithValue("@Price", textBox5.Text);
+            cmd.Parameters.AddWithValue("@PoIAddress", textBox6.Text);
+            cmd.Parameters.AddWithValue("@TrType", textBox7.Text);
 
-            cmd.InsertCommand.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
             con.Close();
             MessageBox.Show("Sucessfully Created!(Go check the near box)");

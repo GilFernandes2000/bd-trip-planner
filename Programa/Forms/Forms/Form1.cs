@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
 using System.Data.SqlClient;
 
-namespace Forms
+namespace TripPlanner
 {
     public partial class Form1 : Form
     {
@@ -37,17 +41,17 @@ namespace Forms
         private void button1_Click(object sender, EventArgs e)
         {
             SqlConnection con = new SqlConnection(connectionString: "Data Source=tcp:mednat.ieeta.pt\\SQLSERVER,8101;Initial Catalog=p1g1;Persist Security Info=True;User ID=p1g1;Password=Porto>Benfica;");
-            SqlDataAdapter cmd = new SqlDataAdapter();
-            cmd.InsertCommand = new SqlCommand("INSERT INTO TripPlanner.Person (PfName,PmName,PlName,CC,Email,PAddress,Sex) VALUES (@FirstName,@MiddleName,@LastName,@CC,@Email,@Address,@Sex)", con);
-            cmd.InsertCommand.Parameters.AddWithValue("@FirstName", textBox1.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@MiddleName", textBox2.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@LastName", textBox3.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@CC", textBox4.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Email", textBox5.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Address", textBox6.Text);
-            cmd.InsertCommand.Parameters.AddWithValue("@Sex", textBox7.Text);
+            SqlCommand cmd = new("TripPlanner.AddPerson", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@FirstName", textBox1.Text);
+            cmd.Parameters.AddWithValue("@MiddleName", textBox2.Text);
+            cmd.Parameters.AddWithValue("@LastName", textBox3.Text);
+            cmd.Parameters.AddWithValue("@CC", textBox4.Text);
+            cmd.Parameters.AddWithValue("@Email", textBox5.Text);
+            cmd.Parameters.AddWithValue("@Address", textBox6.Text);
+            cmd.Parameters.AddWithValue("@Sex", textBox7.Text);
             con.Open();
-            cmd.InsertCommand.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
             con.Close();
             MessageBox.Show("Successfully Saved!");
