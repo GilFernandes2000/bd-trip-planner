@@ -103,7 +103,7 @@ create table TripPlanner.Stays_In(
 	foreign key (StayContact) references TripPlanner.Stay(Contact)
 );
 
-create table TripPlanner.GoesTo(
+create table TripPlanner.Visits(
 	InDay date not null,
 	Trip_ID int not null,
 	POIContact varchar(15) not null,

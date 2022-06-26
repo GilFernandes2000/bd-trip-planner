@@ -101,7 +101,7 @@ end
 
 -- o dia de visita de um local tem de estar dentro do intervalo da viagem
 go
-create trigger POI_visit_within_trip on GoesTo
+create trigger POI_visit_within_trip on Visits
 instead of insert
 as
 begin

@@ -137,8 +137,9 @@ namespace TripPlanner
             }
 
             String item = comboBox2.Items[comboBox2.SelectedIndex].ToString();
-            String query = "select * FROM TripPlanner.POInterest WHERE City = '" + item + "'";
+            String query = "SELECT PoIName, Rating, Email, Contact, Price, PoIAddress FROM getPoIByCity(@City)";
             SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@City", item);
             SqlDataReader reader = cmd.ExecuteReader();
             listBox2.Items.Clear();
             while (reader.Read())
